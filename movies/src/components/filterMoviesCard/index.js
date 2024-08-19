@@ -39,18 +39,21 @@ export default function FilterMoviesCard(props) {
     genres.unshift({ id: "0", name: "All" });
   }
 
-  const handleChange = (e, type, value) => {
-    e.preventDefault();
-    props.onUserInput(type, value); // NEW
-  };
+ // Inside FilterMoviesCard
+const handleTextChange = (e) => {
+  handleChange(e, "name", e.target.value);
+};
 
-  const handleTextChange = (e) => {
-    handleChange(e, "name", e.target.value);
-  };
+const handleGenreChange = (e) => {
+  handleChange(e, "genre", e.target.value);
+};
 
-  const handleGenreChange = (e) => {
-    handleChange(e, "genre", e.target.value);
-  };
+// This handleChange calls the passed in onUserInput from the parent component
+const handleChange = (e, type, value) => {
+  e.preventDefault();
+  props.onUserInput(type, value);
+};
+
 
   return (
     <Card 

@@ -1,51 +1,54 @@
-import React, { useState, useEffect } from "react";
-import MovieHeader from "../headerMovie";
-import Grid from "@mui/material/Grid";
-import ImageList from "@mui/material/ImageList";
-import ImageListItem from "@mui/material/ImageListItem";
-import { getMovieImages } from "../../api/tmdb-api";
+import React, { useEffect, useState } from 'react';
+import Grid from '@mui/material/Grid';
+import MovieHeader from '../headerMovie';
+import { getMovieImages } from '../../api/tmdb-api';
+import { Carousel } from 'react-responsive-carousel';
+import "react-responsive-carousel/lib/styles/carousel.min.css"; 
 
 const TemplateMoviePage = ({ movie, children }) => {
-  const [images, setImages] = useState([]);
+    const [images, setImages] = useState([]);
 
-  useEffect(() => {
-    getMovieImages(movie.id).then((images) => {
-      setImages(images);
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    useEffect(() => {
+        getMovieImages(movie.id)
+            .then((data) => {
+                setImages(data?.posters || []); 
+            })
+            .catch((error) => {
+                console.error("Failed to fetch images:", error);
+                setImages([]); 
+            });
+    }, [movie.id]);
 
-  return (
-    <>
-      <MovieHeader movie={movie} />
+    return (
+        <>
+            <MovieHeader movie={movie} />
 
-      <Grid container spacing={5} sx={{ padding: "15px" }}>
-        <Grid item xs={3}>
-          <div sx={{
-            display: "flex",
-            flexWrap: "wrap",
-            justifyContent: "space-around",
-          }}>
-            <ImageList 
-                cols={1}>
-                {images.map((image) => (
-                    <ImageListItem key={image.file_path} cols={1}>
-                    <img
-                        src={`https://image.tmdb.org/t/p/w500/${image.file_path}`}
-                        alt={image.poster_path}
-                    />
-                    </ImageListItem>
-                ))}
-            </ImageList>
-          </div>
-        </Grid>
-
-        <Grid item xs={9}>
-          {children}
-        </Grid>
-      </Grid>
-    </>
-  );
+            <Grid container spacing={5} sx={{ padding: "15px" }}>
+                <Grid item xs={3}>
+                    <Carousel
+                        showArrows={true}
+                        infiniteLoop={true}
+                        showThumbs={false}
+                        dynamicHeight={true}
+                        autoPlay={true}
+                        interval={3000}
+                    >
+                        {images.map((image) => (
+                            <div key={image.file_path}>
+                                <img
+                                    src={`https://image.tmdb.org/t/p/w500/${image.file_path}`}
+                                    alt="Movie scene"
+                                />
+                            </div>
+                        ))}
+                    </Carousel>
+                </Grid>
+                <Grid item xs={9}>
+                    {children}
+                </Grid>
+            </Grid>
+        </>
+    );
 };
 
 export default TemplateMoviePage;
