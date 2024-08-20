@@ -6,7 +6,7 @@ import { getMovie } from "../api/tmdb-api";
 import { useQuery } from "react-query";
 import Spinner from '../components/spinner';
 import Drawer from '@mui/material/Drawer';
-import MovieReviews from "../components/movieReviews"; // Ensure this import
+import MovieReviews from "../components/movieReviews"; 
 
 const MoviePage = () => {
   const { id } = useParams();

@@ -1,48 +1,32 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import CardHeader from "@mui/material/CardHeader";
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import CalendarIcon from "@mui/icons-material/CalendarTodayTwoTone";
-import StarRateIcon from "@mui/icons-material/StarRate";
 import IconButton from "@mui/material/IconButton";
 import Grid from "@mui/material/Grid";
 import Avatar from "@mui/material/Avatar";
-import img from '../../images/film-poster-placeholder.png';
-import { MoviesContext } from "../../contexts/moviesContext";
+import img from "../../images/film-poster-placeholder.png";
+import WriteReviewIcon from "../cardIcons/writeReview";
 
-export default function MovieCard({ movie, action }) {
-  const { favorites, addToFavorites } = useContext(MoviesContext);
-
-  if (favorites.find((id) => id === movie.id)) {
-    movie.favorite = true;
-  } else {
-    movie.favorite = false;
-  }
-
-  const handleAddToFavorite = (e) => {
-    e.preventDefault();
-    addToFavorites(movie);
-  };
-
+const MovieCard = ({ movie, action }) => {
   return (
     <Card sx={{ maxWidth: 500 }}>
       <CardHeader
         avatar={
           movie.favorite ? (
-            <Avatar sx={{ backgroundColor: 'red' }}>
+            <Avatar sx={{ backgroundColor: "red" }}>
               <FavoriteIcon />
             </Avatar>
           ) : null
         }
         title={
           <Typography variant="h5" component="p">
-            {movie.title}{" "}
+            {movie.title}
           </Typography>
         }
       />
@@ -58,26 +42,28 @@ export default function MovieCard({ movie, action }) {
         <Grid container>
           <Grid item xs={6}>
             <Typography variant="body2" component="p">
-              <CalendarIcon fontSize="small" />
-              {movie.release_date}
+              Release Date: {movie.release_date}
             </Typography>
           </Grid>
           <Grid item xs={6}>
             <Typography variant="body2" component="p">
-              <StarRateIcon fontSize="small" />
-              {"  "} {movie.vote_average}{" "}
+              Rating: {movie.vote_average}
             </Typography>
           </Grid>
         </Grid>
       </CardContent>
       <CardActions disableSpacing>
-        {action(movie)}
+        {action && action(movie)} 
+        <WriteReviewIcon movie={movie} />
         <Link to={`/movies/${movie.id}`}>
-          <Button variant="outlined" size="small" color="primary">
-            More Info ...
-          </Button>
+          <IconButton>
+            <Typography variant="button">More Info</Typography>
+          </IconButton>
         </Link>
       </CardActions>
     </Card>
   );
-}
+};
+
+export default MovieCard;
+

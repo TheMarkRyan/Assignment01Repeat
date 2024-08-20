@@ -125,3 +125,26 @@ export const getTrendingMovies = async () => {
   }
 };
 
+// Fetch latest movie
+export const getLatestMovies = async () => {
+  const url = `${baseUrl}/movie/latest?api_key=${apiKey}`;
+  const response = await fetch(url);
+  if (!response.ok) throw new Error("Failed to fetch latest movie.");
+  return await response.json();
+};
+
+// Fetch recommended movies
+export const getRecommendedMovies = async () => {
+  const url = `${baseUrl}/movie/popular?api_key=${apiKey}`; // Change endpoint if needed
+  const response = await fetch(url);
+  if (!response.ok) throw new Error("Failed to fetch recommended movies.");
+  return await response.json();
+};
+
+// Fetch top-rated movies
+export const getTopRatedMovies = async () => {
+  const url = `${baseUrl}/movie/top_rated?api_key=${apiKey}`;
+  const response = await fetch(url);
+  if (!response.ok) throw new Error("Failed to fetch top-rated movies.");
+  return await response.json();
+};

@@ -11,8 +11,7 @@ import { Link } from "react-router-dom";
 import { getMovieReviews } from "../../api/tmdb-api";
 import { excerpt } from "../../util";
 
-const MovieReviews = ({ movieId }) => {
-  // Using useQuery to fetch reviews based on the movieId
+const MovieReviews = ({ movieId, movieTitle }) => {
   const { data: reviewsData, error, isLoading, isError } = useQuery(
     ["reviews", { id: movieId }],
     getMovieReviews
@@ -21,7 +20,6 @@ const MovieReviews = ({ movieId }) => {
   if (isLoading) return <p>Loading reviews...</p>;
   if (isError) return <p>{error.message}</p>;
 
-  // Safeguard: Ensure reviews is an array before mapping
   const reviews = reviewsData?.results || [];
 
   return (
@@ -45,7 +43,7 @@ const MovieReviews = ({ movieId }) => {
                     to={`/reviews/${review.id}`}
                     state={{
                       review: review,
-                      movie: { id: movieId },
+                      movie: { id: movieId, title: movieTitle }, // Pass movieTitle here
                     }}
                   >
                     Full Review
@@ -67,4 +65,3 @@ const MovieReviews = ({ movieId }) => {
 };
 
 export default MovieReviews;
-
