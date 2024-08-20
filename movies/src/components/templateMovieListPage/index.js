@@ -3,11 +3,8 @@ import Header from "../headerMovieList";
 import FilterCard from "../filterMoviesCard";
 import MovieList from "../movieList";
 import Grid from "@mui/material/Grid";
-import { useQuery } from "react-query";
-import Spinner from '../spinner'
 
-
-function MovieListPageTemplate({ movies, title, selectFavorite }) {
+function MovieListPageTemplate({ movies, title, action }) {
   const [nameFilter, setNameFilter] = useState("");
   const [genreFilter, setGenreFilter] = useState("0");
   const genreId = Number(genreFilter);
@@ -38,9 +35,10 @@ function MovieListPageTemplate({ movies, title, selectFavorite }) {
             genreFilter={genreFilter}
           />
         </Grid>
-        <MovieList selectFavorite={selectFavorite} movies={displayedMovies}></MovieList>
+        <MovieList action={action} movies={displayedMovies}></MovieList>
       </Grid>
     </Grid>
   );
 }
+
 export default MovieListPageTemplate;

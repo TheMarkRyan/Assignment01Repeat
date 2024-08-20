@@ -1,44 +1,25 @@
-import React, { useEffect, useState } from 'react';
-import PageTemplate from '../components/templateMovieListPage'; 
-import { getUpcomingMovies } from '../api/tmdb-api';
+import React from "react";
+import { useQuery } from 'react-query';
+import Spinner from '../components/spinner';
+import { getUpcomingMovies } from "../api/tmdb-api";
+import PageTemplate from '../components/templateMovieListPage';
+import AddToFavoritesIcon from '../components/cardIcons/addToFavorites'; // Import the favorite icon
 
 const UpcomingMoviesPage = () => {
-    const [movies, setMovies] = useState([]);
-    const [error, setError] = useState(null);
+  const { data, error, isLoading, isError } = useQuery('upcoming', getUpcomingMovies);
 
-    useEffect(() => {
-        getUpcomingMovies()
-            .then(data => {
-                setMovies(data.results || []);
-            })
-            .catch(error => {
-                setError(error);
-                console.error("Failed to fetch movies:", error);
-            });
-    }, []);
+  if (isLoading) return <Spinner />;
+  if (isError) return <h1>{error.message}</h1>;
 
-    const handleFavorite = (movieId) => {
-        const updatedMovies = movies.map((m) =>
-            m.id === movieId ? { ...m, favorite: true } : m
-        );
-        setMovies(updatedMovies);
-    };
+  const movies = data?.results || [];
 
-    if (error) {
-        return <div>Error: {error.message}</div>;
-    }
-
-    if (movies.length === 0) {
-        return <div>Loading upcoming movies...</div>;
-    }
-
-    return (
-        <PageTemplate
-            title="Upcoming Movies"
-            movies={movies}
-            selectFavorite={handleFavorite}
-        />
-    );
+  return (
+    <PageTemplate
+      title="Upcoming Movies"
+      movies={movies}
+      action={(movie) => <AddToFavoritesIcon movie={movie} />} // Use the action prop for the icon
+    />
+  );
 };
 
 export default UpcomingMoviesPage;
