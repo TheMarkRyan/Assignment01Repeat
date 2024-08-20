@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
-import {getMovie} from '../api/tmdb-api'
+import { getMovie } from '../api/tmdb-api';
 
-const useMovie = id => {
+const useMovie = (id) => {
   const [movie, setMovie] = useState(null);
+
   useEffect(() => {
-    getMovie(id).then(movie => {
-      setMovie(movie);
-    });
+    getMovie({ queryKey: ["movie", { id }] }) // Pass the correct structure
+      .then((movie) => setMovie(movie));
   }, [id]);
+
   return [movie, setMovie];
 };
 

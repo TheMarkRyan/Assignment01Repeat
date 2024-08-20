@@ -1,32 +1,36 @@
-import React from "react";
-import { useParams } from 'react-router-dom';
+import React, { useState } from "react";
+import { useParams } from "react-router-dom";
 import MovieDetails from "../components/movieDetails/";
 import PageTemplate from "../components/templateMoviePage";
-import { getMovie } from '../api/tmdb-api';
+import { getMovie } from "../api/tmdb-api";
 import { useQuery } from "react-query";
 import Spinner from '../components/spinner';
+import Drawer from '@mui/material/Drawer';
+import MovieReviews from "../components/movieReviews"; // Ensure this import
 
 const MoviePage = () => {
-  const { id } = useParams(); // Extract movie ID from URL params
+  const { id } = useParams();
+  const [showReviews, setShowReviews] = useState(false);
 
   const { data: movie, error, isLoading, isError } = useQuery(
-    ["movie", { id }], // Query key with movie id
-    getMovie // The function used to fetch movie details
+    ["movie", { id }], // Correctly structure the queryKey for movie details
+    getMovie
   );
 
-  if (isLoading) {
-    return <Spinner />;
-  } 
-
-  if (isError) {
-    return <h1>{error.message}</h1>;
-  }
+  if (isLoading) return <Spinner />;
+  if (isError) return <h1>{error.message}</h1>;
 
   return (
     <>
       {movie ? (
         <PageTemplate movie={movie}>
-          <MovieDetails movie={movie} />
+          <MovieDetails movie={movie} setShowReviews={setShowReviews} />
+          {showReviews && (
+  <Drawer anchor="top" open={showReviews} onClose={() => setShowReviews(false)}>
+    <MovieReviews movieId={id} />
+  </Drawer>
+)}
+
         </PageTemplate>
       ) : (
         <p>Waiting for movie details...</p>

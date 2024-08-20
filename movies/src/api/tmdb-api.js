@@ -48,48 +48,45 @@ export const getGenres = async () => {
   }
 };
 
-// Fetch movie reviews
-export const getMovieReviews = async (movieId) => {
-  const url = `${baseUrl}/movie/${movieId}/reviews?api_key=${apiKey}`;
-  try {
-    const response = await fetch(url);
-    if (!response.ok) throw new Error("Failed to fetch movie reviews.");
-    return await response.json();
-  } catch (error) {
-    console.error(error);
-  }
+export const getMovieReviews = async ({ queryKey }) => {
+  const [, { id }] = queryKey; 
+  const url = `${baseUrl}/movie/${id}/reviews?api_key=${apiKey}`;
+  const response = await fetch(url);
+  if (!response.ok) throw new Error("Failed to fetch movie reviews.");
+  return await response.json();
 };
+
+
+
+
+
 
 // Fetch movie images
 export const getMovieImages = async ({ queryKey }) => {
-  const [, { id }] = queryKey; // Destructure to get the movie id
+  const [, { id }] = queryKey; // Ensure that the ID is extracted correctly
   const url = `${baseUrl}/movie/${id}/images?api_key=${apiKey}`;
-
-  try {
-    const response = await fetch(url);
-    if (!response.ok) throw new Error("Failed to fetch movie images.");
-    return await response.json();
-  } catch (error) {
-    console.error("Failed to fetch movie images:", error);
-    throw error;
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error("Failed to fetch movie images.");
   }
+  return await response.json();
 };
+
 
 
 // Fetch movie details
 export const getMovie = async ({ queryKey }) => {
-  const [, { id }] = queryKey; // Destructure to get the movie id
+  const [, { id }] = queryKey;
+  console.log("Fetching movie details for ID:", id); // Debugging log
   const url = `${baseUrl}/movie/${id}?api_key=${apiKey}`;
-
-  try {
-    const response = await fetch(url);
-    if (!response.ok) throw new Error("Failed to fetch movie details.");
-    return await response.json();
-  } catch (error) {
-    console.error("Failed to fetch movie details:", error);
-    throw error;
-  }
+  const response = await fetch(url);
+  if (!response.ok) throw new Error("Failed to fetch movie details.");
+  return await response.json();
 };
+
+
+
+
 
 
 // Fetch upcoming movies
@@ -127,3 +124,4 @@ export const getTrendingMovies = async () => {
     console.error(error);
   }
 };
+

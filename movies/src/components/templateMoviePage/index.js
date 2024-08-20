@@ -1,33 +1,28 @@
 import React from "react";
-import Grid from '@mui/material/Grid';
-import MovieHeader from '../headerMovie';
 import { useQuery } from "react-query";
-import { getMovieImages } from '../../api/tmdb-api';
-import { Carousel } from 'react-responsive-carousel';
-import Spinner from '../spinner';
+import MovieHeader from "../headerMovie";
+import Grid from "@mui/material/Grid";
+import Spinner from "../spinner";
+import { getMovieImages } from "../../api/tmdb-api";
+import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; 
-
 const TemplateMoviePage = ({ movie, children }) => {
   const { data: imagesData, error, isLoading, isError } = useQuery(
-    ["images", { id: movie.id }], // Query key with movie id
-    getMovieImages // The function used to fetch movie images
+    ["images", { id: movie.id }],
+    getMovieImages
   );
 
-  if (isLoading) {
-    return <Spinner />;
-  }
+  if (isLoading) return <Spinner />;
+  if (isError) return <h1>{error.message}</h1>;
 
-  if (isError) {
-    return <h1>{error.message}</h1>;
-  }
-
-  const images = imagesData?.posters || []; // Safeguard in case posters are undefined
+  const images = imagesData?.posters || [];
 
   return (
     <>
       <MovieHeader movie={movie} />
       <Grid container spacing={5} sx={{ padding: "15px" }}>
         <Grid item xs={3}>
+          {/* Carousel for movie images */}
           <Carousel
             showArrows={true}
             infiniteLoop={true}
