@@ -115,3 +115,15 @@ export const getMovies = async () => {
     console.error(error);
   }
 };
+
+// Fetch trending movies
+export const getTrendingMovies = async () => {
+  const url = `${baseUrl}/trending/movie/week?api_key=${apiKey}`;
+  try {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error("Failed to fetch trending movies.");
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+  }
+};
