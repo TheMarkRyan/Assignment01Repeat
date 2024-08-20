@@ -61,28 +61,36 @@ export const getMovieReviews = async (movieId) => {
 };
 
 // Fetch movie images
-export const getMovieImages = async (movieId) => {
-  const url = `${baseUrl}/movie/${movieId}/images?api_key=${apiKey}`;
+export const getMovieImages = async ({ queryKey }) => {
+  const [, { id }] = queryKey; // Destructure to get the movie id
+  const url = `${baseUrl}/movie/${id}/images?api_key=${apiKey}`;
+
   try {
     const response = await fetch(url);
     if (!response.ok) throw new Error("Failed to fetch movie images.");
     return await response.json();
   } catch (error) {
-    console.error(error);
+    console.error("Failed to fetch movie images:", error);
+    throw error;
   }
 };
 
+
 // Fetch movie details
-export const getMovie = async (movieId) => {
-  const url = `${baseUrl}/movie/${movieId}?api_key=${apiKey}`;
+export const getMovie = async ({ queryKey }) => {
+  const [, { id }] = queryKey; // Destructure to get the movie id
+  const url = `${baseUrl}/movie/${id}?api_key=${apiKey}`;
+
   try {
     const response = await fetch(url);
     if (!response.ok) throw new Error("Failed to fetch movie details.");
     return await response.json();
   } catch (error) {
-    console.error(error);
+    console.error("Failed to fetch movie details:", error);
+    throw error;
   }
 };
+
 
 // Fetch upcoming movies
 export const getUpcomingMovies = async () => {
@@ -96,7 +104,7 @@ export const getUpcomingMovies = async () => {
   }
 };
 
-// Fetch discover movies (for the homepage)
+// Fetch discover movies (for homepage)
 export const getMovies = async () => {
   const url = `${baseUrl}/discover/movie?api_key=${apiKey}`;
   try {

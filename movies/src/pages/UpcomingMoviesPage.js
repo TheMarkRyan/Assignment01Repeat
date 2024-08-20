@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import PageTemplate from '../components/templateMovieListPage'; // Reusing the template
+import PageTemplate from '../components/templateMovieListPage'; 
 import { getUpcomingMovies } from '../api/tmdb-api';
 
 const UpcomingMoviesPage = () => {

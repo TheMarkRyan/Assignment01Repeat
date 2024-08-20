@@ -24,7 +24,7 @@ export default function MovieCard(props) {
   };
 
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card sx={{ width: 300, height: 400 }}> 
       <CardHeader
         avatar={
           movie.favorite ? (
@@ -34,13 +34,13 @@ export default function MovieCard(props) {
           ) : null
         }
         title={
-          <Typography variant="h5" component="p">
+          <Typography variant="h6" component="p"> 
             {movie.title}{" "}
           </Typography>
         }
       />
       <CardMedia
-        sx={{ height: 500 }}
+        sx={{ height: 180 }} 
         image={
           movie.poster_path
             ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}`
@@ -50,13 +50,13 @@ export default function MovieCard(props) {
       <CardContent>
         <Grid container>
           <Grid item xs={6}>
-            <Typography variant="h6" component="p">
+            <Typography variant="body2" component="p"> {/* Adjusted font size */}
               <CalendarIcon fontSize="small" />
               {movie.release_date}
             </Typography>
           </Grid>
           <Grid item xs={6}>
-            <Typography variant="h6" component="p">
+            <Typography variant="body2" component="p"> {/* Adjusted font size */}
               <StarRateIcon fontSize="small" />
               {"  "} {movie.vote_average}{" "}
             </Typography>
@@ -68,7 +68,7 @@ export default function MovieCard(props) {
           <FavoriteIcon color={movie.favorite ? "secondary" : "primary"} fontSize="large" />
         </IconButton>
         <Link to={`/movies/${movie.id}`}>
-          <Button variant="outlined" size="medium" color="primary">
+          <Button variant="outlined" size="small" color="primary">
             More Info ...
           </Button>
         </Link>

@@ -3,7 +3,6 @@ import { useQuery } from "react-query";
 import Spinner from '../spinner';
 import Card from "@mui/material/Card";
 import { getGenres } from "../../api/tmdb-api";
-import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import InputLabel from "@mui/material/InputLabel";
@@ -12,11 +11,11 @@ import TextField from "@mui/material/TextField";
 import SearchIcon from "@mui/icons-material/Search";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import img from '../../images/pexels-dziana-hasanbekava-5480827.jpg'
+import Box from "@mui/material/Box";
 
 const formControl = {
   margin: 1,
-  minWidth: 220,
+  minWidth: 150,
   backgroundColor: "rgb(255, 255, 255)"
 };
 
@@ -39,70 +38,64 @@ export default function FilterMoviesCard(props) {
     genres.unshift({ id: "0", name: "All" });
   }
 
- // Inside FilterMoviesCard
-const handleTextChange = (e) => {
-  handleChange(e, "name", e.target.value);
-};
+  const handleTextChange = (e) => {
+    handleChange(e, "name", e.target.value);
+  };
 
-const handleGenreChange = (e) => {
-  handleChange(e, "genre", e.target.value);
-};
+  const handleGenreChange = (e) => {
+    handleChange(e, "genre", e.target.value);
+  };
 
-// This handleChange calls the passed in onUserInput from the parent component
-const handleChange = (e, type, value) => {
-  e.preventDefault();
-  props.onUserInput(type, value);
-};
-
+  // This handleChange calls the passed in onUserInput from the parent component
+  const handleChange = (e, type, value) => {
+    e.preventDefault();
+    props.onUserInput(type, value);
+  };
 
   return (
     <Card 
       sx={{
-        maxWidth: 345,
-        backgroundColor: "rgb(204, 204, 0)"
+        width: "100%", /* Ensure the card spans the full width */
+        backgroundColor: "#203354", /* Adjust this color as needed */
+        color: "#ffffff", /* Ensure text is visible on the new background */
+        borderRadius: 1,
+        marginBottom: 2,
       }} 
-      variant="outlined">
-      <CardContent>
-        <Typography variant="h5" component="h1">
-          <SearchIcon fontSize="large" />
-          Filter the movies.
-        </Typography>
-        <TextField
-          sx={{...formControl}}
-          id="filled-search"
-          label="Search field"
-          type="search"
-          variant="filled"
-          value={props.titleFilter}
-          onChange={handleTextChange}
-        />
-        <FormControl sx={{...formControl}}>
-          <InputLabel id="genre-label">Genre</InputLabel>
-          <Select
-            labelId="genre-label"
-            id="genre-select"
-            value={props.genreFilter}
-            onChange={handleGenreChange}
-          >
-            {genres.map((genre) => (
-              <MenuItem key={genre.id} value={genre.id}>
-                {genre.name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </CardContent>
-      <CardMedia
-        sx={{ height: 300 }}
-        image={img}
-        title="Filter"
-      />
-      <CardContent>
-        <Typography variant="h5" component="h1">
-          <SearchIcon fontSize="large" />
-          Filter the movies.
-          <br />
-        </Typography>
+      variant="outlined"
+    >
+      <CardContent sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}> {/* Flexbox for horizontal layout */}
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          <SearchIcon fontSize="large" sx={{ marginRight: 2 }} />
+          <Typography variant="h5" component="h1" sx={{ marginRight: 2 }}>
+            Filter Movies
+          </Typography>
+        </Box>
+        <Box sx={{ display: "flex", alignItems: "center", flexGrow: 1, justifyContent: "space-evenly" }}> {/* Flexbox to evenly space form controls */}
+          <TextField
+            sx={{...formControl, flexBasis: "40%"}} /* Adjust width */
+            id="filled-search"
+            label="Search field"
+            type="search"
+            variant="filled"
+            value={props.titleFilter}
+            onChange={handleTextChange}
+          />
+          <FormControl sx={{...formControl, flexBasis: "30%"}}> {/* Adjust width */}
+            <InputLabel id="genre-label">Genre</InputLabel>
+            <Select
+              labelId="genre-label"
+              id="genre-select"
+              value={props.genreFilter}
+              onChange={handleGenreChange}
+            >
+              {genres.map((genre) => (
+                <MenuItem key={genre.id} value={genre.id}>
+                  {genre.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Box>
       </CardContent>
     </Card>
   );
