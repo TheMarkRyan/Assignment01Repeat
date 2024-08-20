@@ -15,6 +15,8 @@ import AddMovieReviewPage from './pages/addMovieReviewPage';
 import LatestMoviesPage from "./pages/LatestMoviesPage"; // Import LatestMoviesPage
 import RecommendationsPage from "./pages/RecommendationsPage"; // Import RecommendationsPage
 import TopRatedMoviesPage from "./pages/TopRatedMoviesPage"; // Import TopRatedMoviesPage
+import './index.css'; // Import your global styles last
+
 
 const queryClient = new QueryClient({
   defaultOptions: {

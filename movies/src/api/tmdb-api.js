@@ -133,13 +133,18 @@ export const getLatestMovies = async () => {
   return await response.json();
 };
 
-// Fetch recommended movies
-export const getRecommendedMovies = async () => {
-  const url = `${baseUrl}/movie/popular?api_key=${apiKey}`; // Change endpoint if needed
-  const response = await fetch(url);
-  if (!response.ok) throw new Error("Failed to fetch recommended movies.");
+// Fetch recommended movies for a specific movie
+export const getRecommendedMovies = async (movieId) => {
+  const response = await fetch(
+    `${baseUrl}/movie/${movieId}/recommendations?api_key=${apiKey}`
+  );
+  if (!response.ok) {
+    throw new Error(`Failed to fetch recommendations: ${response.statusText}`);
+  }
   return await response.json();
 };
+
+
 
 // Fetch top-rated movies
 export const getTopRatedMovies = async () => {

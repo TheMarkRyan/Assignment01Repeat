@@ -11,9 +11,12 @@ const AddToFavoritesIcon = ({ movie }) => {
     context.addToFavorites(movie);
   };
 
+  // Determine if the movie is already in the favorites list
+  const isFavorited = context.favorites.includes(movie.id);
+
   return (
     <IconButton aria-label="add to favorites" onClick={handleAddToFavorites}>
-      <FavoriteIcon color="primary" fontSize="large" />
+      <FavoriteIcon color={isFavorited ? "error" : "primary"} fontSize="large" />
     </IconButton>
   );
 };

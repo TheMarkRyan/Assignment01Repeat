@@ -23,18 +23,20 @@ function MovieListPageTemplate({ movies, title, action }) {
   };
 
   return (
-    <Grid container sx={{ padding: '20px' }}>
+    <Grid container sx={{ padding: "20px" }}>
       <Grid item xs={12}>
         <Header title={title} />
       </Grid>
-      <Grid item container spacing={5}>
-        <Grid key="find" item xs={12} sm={6} md={4} lg={3} xl={2}>
-          <FilterCard
-            onUserInput={handleChange}
-            titleFilter={nameFilter}
-            genreFilter={genreFilter}
-          />
-        </Grid>
+      {/* Full-width FilterCard */}
+      <Grid item xs={12}>
+        <FilterCard
+          onUserInput={handleChange}
+          titleFilter={nameFilter}
+          genreFilter={genreFilter}
+          sx={{ width: "100%" }} // Ensure the filter card spans full width
+        />
+      </Grid>
+      <Grid item xs={12}>
         <MovieList action={action} movies={displayedMovies}></MovieList>
       </Grid>
     </Grid>
