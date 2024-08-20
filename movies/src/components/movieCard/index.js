@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+import { MoviesContext } from "../../contexts/moviesContext";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
@@ -15,32 +16,34 @@ import Grid from "@mui/material/Grid";
 import Avatar from "@mui/material/Avatar";
 import img from '../../images/film-poster-placeholder.png';
 
-export default function MovieCard(props) {
-  const { movie, selectFavorite } = props;
+export default function MovieCard({ movie }) {
+  const { favorites, addToFavorites } = useContext(MoviesContext);
+
+  const isFavorite = favorites.includes(movie.id);
 
   const handleAddToFavorite = (e) => {
     e.preventDefault();
-    selectFavorite(movie);
+    addToFavorites(movie);
   };
 
   return (
-    <Card sx={{ width: 300, height: 400 }}> 
+    <Card sx={{ maxWidth: 500 }}>
       <CardHeader
         avatar={
-          movie.favorite ? (
+          isFavorite ? (
             <Avatar sx={{ backgroundColor: 'red' }}>
               <FavoriteIcon />
             </Avatar>
           ) : null
         }
         title={
-          <Typography variant="h6" component="p"> 
+          <Typography variant="h5" component="p">
             {movie.title}{" "}
           </Typography>
         }
       />
       <CardMedia
-        sx={{ height: 180 }} 
+        sx={{ height: 250 }}
         image={
           movie.poster_path
             ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}`
@@ -49,14 +52,14 @@ export default function MovieCard(props) {
       />
       <CardContent>
         <Grid container>
-          <Grid item xs={6}>
-            <Typography variant="body2" component="p"> {/* Adjusted font size */}
+          <Grid item xs={4}>
+            <Typography variant="h6" component="p">
               <CalendarIcon fontSize="small" />
               {movie.release_date}
             </Typography>
           </Grid>
-          <Grid item xs={6}>
-            <Typography variant="body2" component="p"> {/* Adjusted font size */}
+          <Grid item xs={4}>
+            <Typography variant="h6" component="p">
               <StarRateIcon fontSize="small" />
               {"  "} {movie.vote_average}{" "}
             </Typography>
@@ -65,10 +68,10 @@ export default function MovieCard(props) {
       </CardContent>
       <CardActions disableSpacing>
         <IconButton aria-label="add to favorites" onClick={handleAddToFavorite}>
-          <FavoriteIcon color={movie.favorite ? "secondary" : "primary"} fontSize="large" />
+          <FavoriteIcon color={isFavorite ? "secondary" : "primary"} fontSize="large" />
         </IconButton>
         <Link to={`/movies/${movie.id}`}>
-          <Button variant="outlined" size="small" color="primary">
+          <Button variant="outlined" size="medium" color="primary">
             More Info ...
           </Button>
         </Link>
