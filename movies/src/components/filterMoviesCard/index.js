@@ -2,7 +2,6 @@ import React from "react";
 import { useQuery } from "react-query";
 import Spinner from '../spinner';
 import Card from "@mui/material/Card";
-import { getGenres } from "../../api/tmdb-api";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import InputLabel from "@mui/material/InputLabel";
@@ -12,12 +11,12 @@ import SearchIcon from "@mui/icons-material/Search";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import Box from "@mui/material/Box";
+import { getGenres } from "../../api/tmdb-api";
 
 const formControl = {
+  margin: 1,
   minWidth: 150,
-  backgroundColor: "rgba(255, 255, 255, 0.9)",
-  borderRadius: "8px",
-  marginRight: "16px",
+  backgroundColor: "rgb(255, 255, 255)",
 };
 
 export default function FilterMoviesCard(props) {
@@ -36,6 +35,10 @@ export default function FilterMoviesCard(props) {
     genres.unshift({ id: "0", name: "All" });
   }
 
+  const genreValue = props.genreFilter ?? "0";
+  const sortValue = props.sortBy ?? "popularity.desc";
+  const actorValue = props.actorFilter ?? ""; // New state for actor search
+
   const handleTextChange = (e) => {
     handleChange(e, "name", e.target.value);
   };
@@ -43,32 +46,36 @@ export default function FilterMoviesCard(props) {
   const handleGenreChange = (e) => {
     handleChange(e, "genre", e.target.value);
   };
-  
-  // This handleChange calls the passed in onUserInput from the parent component
+
+  const handleSortChange = (e) => {
+    handleChange(e, "sort", e.target.value);
+  };
+
+  const handleActorChange = (e) => {
+    handleChange(e, "actor", e.target.value); // Handle actor search
+  };
+
   const handleChange = (e, type, value) => {
     e.preventDefault();
     props.onUserInput(type, value);
   };
 
-
   return (
     <Card
-  sx={{
-    width: "100%",
-    backgroundColor: "#203354", // Adjust this color as needed
-    color: "#ffffff",
-    borderRadius: 1,
-    marginBottom: 2,
-    padding: 2, // Optional padding to make it look more polished
-  }}
-  variant="outlined"
->
+      sx={{
+        width: "100%",
+        backgroundColor: "#203354",
+        color: "#ffffff",
+        borderRadius: 1,
+        marginBottom: 2,
+      }}
+      variant="outlined"
+    >
       <CardContent
         sx={{
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          width: "100%", // Ensure CardContent takes up the full available width
         }}
       >
         <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -83,24 +90,32 @@ export default function FilterMoviesCard(props) {
             alignItems: "center",
             flexGrow: 1,
             justifyContent: "space-evenly",
-            width: "100%", // Allow the input and select fields to stretch fully
           }}
         >
           <TextField
-            sx={{ ...formControl, flexGrow: 1 }} // Allow search field to grow
-            id="filled-search"
+            sx={{ ...formControl, flexBasis: "30%" }}
+            id="filled-search-title"
             label="Search by Title"
             type="search"
-            variant="outlined"
-            value={props.titleFilter}
+            variant="filled"
+            value={props.titleFilter ?? ""}
             onChange={handleTextChange}
           />
-          <FormControl sx={{ ...formControl, minWidth: 180 }}>
+          <TextField
+            sx={{ ...formControl, flexBasis: "20%" }}
+            id="filled-search-actor"
+            label="Search by Actor"
+            type="search"
+            variant="filled"
+            value={actorValue} // Ensure actor search works independently
+            onChange={handleActorChange}
+          />
+          <FormControl sx={{ ...formControl, flexBasis: "20%" }}>
             <InputLabel id="genre-label">Genre</InputLabel>
             <Select
               labelId="genre-label"
               id="genre-select"
-              value={props.genreFilter}
+              value={genreValue}
               onChange={handleGenreChange}
             >
               {genres.map((genre) => (

@@ -101,18 +101,6 @@ export const getUpcomingMovies = async () => {
   }
 };
 
-// Fetch discover movies (for homepage)
-export const getMovies = async () => {
-  const url = `${baseUrl}/discover/movie?api_key=${apiKey}`;
-  try {
-    const response = await fetch(url);
-    if (!response.ok) throw new Error("Failed to fetch movies.");
-    return await response.json();
-  } catch (error) {
-    console.error(error);
-  }
-};
-
 // Fetch trending movies
 export const getTrendingMovies = async () => {
   const url = `${baseUrl}/trending/movie/week?api_key=${apiKey}`;
@@ -133,7 +121,77 @@ export const getLatestMovies = async () => {
   return await response.json();
 };
 
-// Fetch recommended movies for a specific movie
+
+// Fetch top-rated movies
+export const getTopRatedMovies = async () => {
+  const url = `${baseUrl}/movie/top_rated?api_key=${apiKey}`;
+  const response = await fetch(url);
+  if (!response.ok) throw new Error("Failed to fetch top-rated movies.");
+  return await response.json();
+};
+
+export const getMoviesByGenre = async (genreId, sortBy = "popularity.desc") => {
+  const url = `${baseUrl}/discover/movie?api_key=${apiKey}&with_genres=${genreId}&sort_by=${sortBy}&include_adult=false&include_video=false&language=en-US`;
+  try {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error("Failed to fetch movies by genre.");
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+// Fetch discover movies (for homepage)
+export const getMovies = async (sortBy = "popularity.desc") => {
+  const url = `${baseUrl}/discover/movie?api_key=${apiKey}&sort_by=${sortBy}&include_adult=false&include_video=false&language=en-US`;
+  try {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error("Failed to fetch movies.");
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+// Fetch actor by name
+export const getActorByName = async (actorName) => {
+  const url = `${baseUrl}/search/person?api_key=${apiKey}&query=${actorName}`;
+  try {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error("Failed to fetch actor.");
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+// New function to get movies by actor name
+export const getMoviesByActor = async (actorName) => {
+  const url = `${baseUrl}/search/person?api_key=${apiKey}&query=${actorName}`;
+  try {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error("Failed to fetch movies by actor.");
+    const data = await response.json();
+
+    // Extract movie IDs from the actor's known_for field (which includes movies and TV shows)
+    const movieIds = data.results.flatMap((actor) =>
+      actor.known_for.map((movie) => movie.id)
+    );
+
+    // Make additional requests to get detailed information about each movie
+    const movieRequests = movieIds.map((id) =>
+      fetch(`${baseUrl}/movie/${id}?api_key=${apiKey}`)
+    );
+    const movies = await Promise.all(movieRequests);
+
+    return {
+      results: await Promise.all(movies.map((movie) => movie.json())),
+    };
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 export const getRecommendedMovies = async (movieId) => {
   const response = await fetch(
     `${baseUrl}/movie/${movieId}/recommendations?api_key=${apiKey}`
@@ -144,21 +202,12 @@ export const getRecommendedMovies = async (movieId) => {
   return await response.json();
 };
 
-
-
-// Fetch top-rated movies
-export const getTopRatedMovies = async () => {
-  const url = `${baseUrl}/movie/top_rated?api_key=${apiKey}`;
-  const response = await fetch(url);
-  if (!response.ok) throw new Error("Failed to fetch top-rated movies.");
-  return await response.json();
-};
-
-export const getMoviesByGenre = async (genreId) => {
-  const url = `${baseUrl}/discover/movie?api_key=${apiKey}&with_genres=${genreId}`;
-  const response = await fetch(url);
+export const getSimilarMovies = async (movieId) => {
+  const response = await fetch(
+    `${baseUrl}/movie/${movieId}/similar?api_key=${apiKey}`
+  );
   if (!response.ok) {
-    throw new Error("Failed to fetch movies by genre.");
+    throw new Error(`Failed to fetch similar movies: ${response.statusText}`);
   }
   return await response.json();
 };

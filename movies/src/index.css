@@ -1,7 +1,7 @@
 /* Global styles */
 body {
   background: rgb(79,7,121);
-  background: radial-gradient(circle, rgba(79,7,121,1) 0%, rgba(6,23,59,1) 96%); 
+  background: radial-gradient(circle, rgba(79,7,121,1) 0%, rgba(6,23,59,1) 96%);
   font-family: 'Roboto', sans-serif !important;
 }
 
@@ -9,4 +9,29 @@ body {
 .MuiCard-root.filter-card {
   background-color: #000816 !important;
   color: #ffffff !important;
+}
+
+/* Add background color to movie card titles */
+.MuiCardContent-root .MuiTypography-h6 {
+  background-color: #3a3a3a; /* Grey background */
+  color: #ffffff; /* White text color for better contrast */
+  padding: 5px;
+  margin: 0;
+  text-align: center;
+}
+
+/* Additional styles for consistency */
+.MuiCardContent-root {
+  background-color: #3a3a3a !important; /* Match background of the details section */
+  color: #ffffff; /* White text color */
+}
+
+.MuiButton-root {
+  color: #ffffff !important; /* Ensure button text is white */
+  background-color: #3a3a3a !important; /* Match the grey background */
+}
+
+/* Add padding to the buttons */
+.MuiButton-root {
+  padding: 6px 16px;
 }
