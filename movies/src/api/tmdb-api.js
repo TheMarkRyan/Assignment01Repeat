@@ -153,3 +153,12 @@ export const getTopRatedMovies = async () => {
   if (!response.ok) throw new Error("Failed to fetch top-rated movies.");
   return await response.json();
 };
+
+export const getMoviesByGenre = async (genreId) => {
+  const url = `${baseUrl}/discover/movie?api_key=${apiKey}&with_genres=${genreId}`;
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error("Failed to fetch movies by genre.");
+  }
+  return await response.json();
+};

@@ -1,27 +1,26 @@
 import React, { useState } from "react";
 import { useQuery } from "react-query";
-import { getLatestMovies } from "../api/tmdb-api";
+import { getTopRatedMovies, getMoviesByGenre } from "../api/tmdb-api";
 import Spinner from "../components/spinner";
 import PageTemplate from "../components/templateMovieListPage";
 import AddToFavoritesIcon from "../components/cardIcons/addToFavorites";
 import FilterMoviesCard from "../components/filterMoviesCard";
 
-const LatestMoviesPage = () => {
+const TopRatedMoviesPage = () => {
   const [nameFilter, setNameFilter] = useState("");
   const [genreFilter, setGenreFilter] = useState("0");
   const genreId = Number(genreFilter);
 
-  const { data, error, isLoading, isError } = useQuery("latest", getLatestMovies);
+  const { data, error, isLoading, isError } = useQuery(
+    ["topRated", genreId], 
+    () => genreId > 0 ? getMoviesByGenre(genreId) : getTopRatedMovies()
+  );
 
   if (isLoading) return <Spinner />;
   if (isError) return <h1>{error.message}</h1>;
 
-  let movies = data ? [data] : [];
-
-  // Filtering movies based on the filter criteria
-  movies = movies
-    .filter((m) => m.title.toLowerCase().includes(nameFilter.toLowerCase()))
-    .filter((m) => genreId > 0 ? m.genre_ids.includes(genreId) : true);
+  let movies = data?.results || [];
+  movies = movies.filter((m) => m.title.toLowerCase().includes(nameFilter.toLowerCase()));
 
   const handleChange = (type, value) => {
     if (type === "name") setNameFilter(value);
@@ -30,7 +29,7 @@ const LatestMoviesPage = () => {
 
   return (
     <PageTemplate
-      title="Latest Movies"
+      title="Top Rated Movies"
       movies={movies}
       action={(movie) => <AddToFavoritesIcon movie={movie} />}
     >
@@ -43,4 +42,4 @@ const LatestMoviesPage = () => {
   );
 };
 
-export default LatestMoviesPage;
+export default TopRatedMoviesPage;

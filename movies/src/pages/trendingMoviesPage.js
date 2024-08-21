@@ -5,28 +5,30 @@ import Spinner from "../components/spinner";
 import PageTemplate from "../components/templateMovieListPage";
 import AddToFavoritesIcon from "../components/cardIcons/addToFavorites";
 import FilterMoviesCard from "../components/filterMoviesCard";
+import { getMoviesByGenre } from "../api/tmdb-api";
 
 const TrendingMoviesPage = () => {
-  const [nameFilter, setNameFilter] = useState("");
-  const [genreFilter, setGenreFilter] = useState("0");
-  const genreId = Number(genreFilter);
-
-  const { data, error, isLoading, isError } = useQuery("trending", getTrendingMovies);
-
-  if (isLoading) return <Spinner />;
-  if (isError) return <h1>{error.message}</h1>;
-
-  let movies = data?.results || [];
-
-  // Filtering movies based on the filter criteria
-  movies = movies
-    .filter((m) => m.title.toLowerCase().includes(nameFilter.toLowerCase()))
-    .filter((m) => genreId > 0 ? m.genre_ids.includes(genreId) : true);
-
-  const handleChange = (type, value) => {
-    if (type === "name") setNameFilter(value);
-    else setGenreFilter(value);
-  };
+    const [nameFilter, setNameFilter] = useState("");
+    const [genreFilter, setGenreFilter] = useState("0");
+    const genreId = Number(genreFilter);
+  
+    const { data, error, isLoading, isError } = useQuery(
+      ["topRated", genreId], 
+      () => genreId > 0 ? getMoviesByGenre(genreId) : getTrendingMovies() // Fetch movies by genre if a genre is selected
+    );
+  
+    if (isLoading) return <Spinner />;
+    if (isError) return <h1>{error.message}</h1>;
+  
+    let movies = data?.results || [];
+  
+    // Further client-side filtering by title
+    movies = movies.filter((m) => m.title.toLowerCase().includes(nameFilter.toLowerCase()));
+  
+    const handleChange = (type, value) => {
+      if (type === "name") setNameFilter(value);
+      else setGenreFilter(value);
+    };
 
   return (
     <PageTemplate

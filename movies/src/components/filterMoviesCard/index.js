@@ -43,11 +43,13 @@ export default function FilterMoviesCard(props) {
   const handleGenreChange = (e) => {
     handleChange(e, "genre", e.target.value);
   };
-
+  
+  // This handleChange calls the passed in onUserInput from the parent component
   const handleChange = (e, type, value) => {
     e.preventDefault();
     props.onUserInput(type, value);
   };
+
 
   return (
     <Card
