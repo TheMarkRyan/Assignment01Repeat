@@ -1,6 +1,7 @@
 import React from "react";
 import { useQuery } from "react-query";
 import Spinner from '../spinner';
+import { getGenres } from "../../api/tmdb-api";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
@@ -11,7 +12,6 @@ import SearchIcon from "@mui/icons-material/Search";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import Box from "@mui/material/Box";
-import { getGenres } from "../../api/tmdb-api";
 import { useTheme } from "@mui/material/styles";
 
 const formControl = {
@@ -20,9 +20,8 @@ const formControl = {
 };
 
 export default function FilterMoviesCard(props) {
+  const theme = useTheme(); // Access the theme (dark or light mode)
   const { data, error, isLoading, isError } = useQuery("genres", getGenres);
-  const theme = useTheme();
-  const isDarkMode = theme.palette.mode === "dark"; // Check if the theme is in dark mode
 
   if (isLoading) {
     return <Spinner />;
@@ -38,23 +37,18 @@ export default function FilterMoviesCard(props) {
   }
 
   const genreValue = props.genreFilter ?? "0";
-  const sortValue = props.sortBy ?? "popularity.desc";
-  const actorValue = props.actorFilter ?? ""; // New state for actor search
+  const actorValue = props.actorFilter ?? "";
 
   const handleTextChange = (e) => {
     handleChange(e, "name", e.target.value);
   };
 
+  const handleActorChange = (e) => {
+    handleChange(e, "actor", e.target.value);
+  };
+
   const handleGenreChange = (e) => {
     handleChange(e, "genre", e.target.value);
-  };
-
-  const handleSortChange = (e) => {
-    handleChange(e, "sort", e.target.value);
-  };
-
-  const handleActorChange = (e) => {
-    handleChange(e, "actor", e.target.value); // Handle actor search
   };
 
   const handleChange = (e, type, value) => {
@@ -63,49 +57,25 @@ export default function FilterMoviesCard(props) {
   };
 
   return (
-    <Card
-      sx={{
-        width: "100%",
-        backgroundColor: isDarkMode ? "#203354" : "#ffffff", // Adjust background based on mode
-        color: isDarkMode ? "#ffffff" : "#000000", // Adjust text color based on mode
-        borderRadius: 1,
-        marginBottom: 2,
-      }}
-      variant="outlined"
-    >
-      <CardContent
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
+    <Card sx={{ width: "100%", backgroundColor: "#203354", color: "#ffffff", borderRadius: 1, marginBottom: 2 }}>
+      <CardContent sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <SearchIcon fontSize="large" sx={{ marginRight: 2 }} />
           <Typography variant="h5" component="h1" sx={{ marginRight: 2 }}>
             Filter Movies
           </Typography>
         </Box>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            flexGrow: 1,
-            justifyContent: "space-evenly",
-          }}
-        >
+        <Box sx={{ display: "flex", alignItems: "center", flexGrow: 1, justifyContent: "space-evenly" }}>
           <TextField
             sx={{
               ...formControl,
               flexBasis: "30%",
-              input: {
-                color: isDarkMode ? "#ffffff" : "#000000", // Adjust input text color based on mode
+              "& .MuiInputLabel-root": {
+                color: "#ffffff !important", // Force the label color to stay white
               },
               "& .MuiFilledInput-root": {
-                backgroundColor: isDarkMode ? "#3a3a3a" : "#ffffff", // Adjust background based on mode
-              },
-              "& .MuiInputLabel-root": {
-                color: isDarkMode ? "#ffffff" : "#000000", // Adjust label color based on mode
+                backgroundColor: theme.palette.mode === "dark" ? "#333" : "#555", // Background color adjustment
+                color: "#ffffff", // Ensure text inside the input stays white
               },
             }}
             id="filled-search-title"
@@ -119,43 +89,35 @@ export default function FilterMoviesCard(props) {
             sx={{
               ...formControl,
               flexBasis: "20%",
-              input: {
-                color: isDarkMode ? "#ffffff" : "#000000", // Adjust input text color based on mode
+              "& .MuiInputLabel-root": {
+                color: "#ffffff !important", // Force the label color to stay white
               },
               "& .MuiFilledInput-root": {
-                backgroundColor: isDarkMode ? "#3a3a3a" : "#ffffff", // Adjust background based on mode
-              },
-              "& .MuiInputLabel-root": {
-                color: isDarkMode ? "#ffffff" : "#000000", // Adjust label color based on mode
+                backgroundColor: theme.palette.mode === "dark" ? "#333" : "#555", // Background color adjustment
+                color: "#ffffff", // Ensure text inside the input stays white
               },
             }}
             id="filled-search-actor"
             label="Search by Actor"
             type="search"
             variant="filled"
-            value={actorValue} // Ensure actor search works independently
+            value={actorValue}
             onChange={handleActorChange}
           />
           <FormControl
             sx={{
               ...formControl,
               flexBasis: "20%",
-              "& .MuiInputBase-root": {
-                backgroundColor: isDarkMode ? "#3a3a3a" : "#ffffff", // Adjust background of the dropdown based on mode
-                color: isDarkMode ? "#ffffff" : "#000000", // Adjust text color based on mode
-              },
               "& .MuiInputLabel-root": {
-                color: isDarkMode ? "#ffffff" : "#000000", // Adjust label color based on mode
+                color: "#ffffff !important", // Force the label color to stay white
+              },
+              "& .MuiSelect-root": {
+                color: "#ffffff", // Ensure the dropdown text stays white
               },
             }}
           >
             <InputLabel id="genre-label">Genre</InputLabel>
-            <Select
-              labelId="genre-label"
-              id="genre-select"
-              value={genreValue}
-              onChange={handleGenreChange}
-            >
+            <Select labelId="genre-label" id="genre-select" value={genreValue} onChange={handleGenreChange}>
               {genres.map((genre) => (
                 <MenuItem key={genre.id} value={genre.id}>
                   {genre.name}

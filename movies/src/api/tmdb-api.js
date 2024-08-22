@@ -165,32 +165,6 @@ export const getActorByName = async (actorName) => {
   }
 };
 
-// New function to get movies by actor name
-export const getMoviesByActor = async (actorName) => {
-  const url = `${baseUrl}/search/person?api_key=${apiKey}&query=${actorName}`;
-  try {
-    const response = await fetch(url);
-    if (!response.ok) throw new Error("Failed to fetch movies by actor.");
-    const data = await response.json();
-
-    // Extract movie IDs from the actor's known_for field (which includes movies and TV shows)
-    const movieIds = data.results.flatMap((actor) =>
-      actor.known_for.map((movie) => movie.id)
-    );
-
-    // Make additional requests to get detailed information about each movie
-    const movieRequests = movieIds.map((id) =>
-      fetch(`${baseUrl}/movie/${id}?api_key=${apiKey}`)
-    );
-    const movies = await Promise.all(movieRequests);
-
-    return {
-      results: await Promise.all(movies.map((movie) => movie.json())),
-    };
-  } catch (error) {
-    console.error(error);
-  }
-};
 
 export const getRecommendedMovies = async (movieId) => {
   const response = await fetch(
@@ -210,4 +184,84 @@ export const getSimilarMovies = async (movieId) => {
     throw new Error(`Failed to fetch similar movies: ${response.statusText}`);
   }
   return await response.json();
+};
+// Updated getMoviesByActor function in your tmdb-api.js file
+export const getMoviesByActor = async (actorName) => {
+  const url = `${baseUrl}/search/person?api_key=${apiKey}&query=${actorName}`;
+  try {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error("Failed to fetch movies by actor.");
+    const data = await response.json();
+
+    // Check if the actor exists and has known movies
+    const actor = data.results[0];
+    if (!actor || !actor.id) {
+      return { results: [] }; // Return an empty array if no actor is found
+    }
+
+    // Fetch combined credits (movies and TV shows) using the actor ID
+    const creditsUrl = `${baseUrl}/person/${actor.id}/combined_credits?api_key=${apiKey}`;
+    const creditsResponse = await fetch(creditsUrl);
+    if (!creditsResponse.ok) throw new Error("Failed to fetch actor credits.");
+
+    const creditsData = await creditsResponse.json();
+
+    // Filter only movies from the combined credits
+    const movies = creditsData.cast.filter((credit) => credit.media_type === "movie");
+
+    return { results: movies };
+  } catch (error) {
+    console.error(error);
+    return { results: [] }; // Return an empty array in case of an error
+  }
+};
+
+
+// Get movies for a specific actor by ID
+export const getMoviesByActorId = async (actorId) => {
+  const url = `${baseUrl}/person/${actorId}/combined_credits?api_key=${apiKey}`;
+  try {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error("Failed to fetch movies for actor.");
+    const data = await response.json();
+    // Filter to get only movies (not TV shows)
+    return data.cast.filter((credit) => credit.media_type === "movie");
+  } catch (error) {
+    console.error(error);
+  }
+};
+// Function to search for an actor
+export const searchActor = async (actorName) => {
+  const url = `${baseUrl}/search/person?api_key=${apiKey}&query=${actorName}`;
+  try {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error("Failed to fetch actor.");
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+// Function to get movies an actor has appeared in
+export const getActorMovies = async (actorId) => {
+  const url = `${baseUrl}/person/${actorId}/movie_credits?api_key=${apiKey}`;
+  try {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error("Failed to fetch actor's movies.");
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const getPopularActors = async () => {
+  const url = `${baseUrl}/person/popular?api_key=${apiKey}`;
+  try {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error("Failed to fetch popular actors.");
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 };

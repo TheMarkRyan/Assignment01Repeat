@@ -33,6 +33,7 @@ const SiteHeader = () => {
 
   const menuOptions = [
     { label: "Home", path: "/" },
+    { label: "Actors", path: "/actors" },
     { label: "Favorites", path: "/movies/favorites" },
     { label: "Upcoming Movies", path: "/movies/upcoming" }, 
     { label: "Trending", path: "/movies/trending" },

@@ -1,7 +1,7 @@
 /* Global styles */
 body {
-  background: rgb(79,7,121);
-  background: radial-gradient(circle, rgba(79,7,121,1) 0%, rgba(6,23,59,1) 96%);
+  background: rgb(79, 7, 121);
+  background: radial-gradient(circle, rgba(79, 7, 121, 1) 0%, rgba(6, 23, 59, 1) 96%);
   font-family: 'Roboto', sans-serif !important;
 }
 
@@ -11,92 +11,61 @@ body {
   color: #ffffff !important;
 }
 
-/* Add background color to movie card titles */
-.MuiCardContent-root .MuiTypography-h6 {
-  background-color: #3a3a3a; /* Grey background */
-  color: #ffffff; /* White text color for better contrast */
-  padding: 5px;
-  margin: 0;
-  text-align: center;
+/* Adjusting input and select elements for light and dark mode */
+body.dark-mode input[type="search"],
+body.dark-mode .MuiTextField-root input,
+body.dark-mode .MuiSelect-root,
+body.dark-mode .MuiOutlinedInput-input {
+  background-color: #3a3a3a !important; /* Dark background in dark mode */
+  color: #ffffff !important; /* White text color for better readability */
 }
 
-/* Additional styles for consistency */
-.MuiCardContent-root {
-  background-color: #3a3a3a !important; /* Match background of the details section */
-  color: #ffffff; /* White text color */
+body.light-mode input[type="search"],
+body.light-mode .MuiTextField-root input,
+body.light-mode .MuiSelect-root,
+body.light-mode .MuiOutlinedInput-input {
+  background-color: #ffffff !important; /* White background in light mode */
+  color: #000000 !important; /* Black text color for better readability */
 }
 
-.MuiButton-root {
-  color: #ffffff !important; /* Ensure button text is white */
-  background-color: #3a3a3a !important; /* Match the grey background */
+/* Placeholder text color adjustments */
+body.dark-mode input[type="search"]::placeholder,
+body.dark-mode .MuiTextField-root input::placeholder {
+  color: #ffffff !important; /* White placeholder text in dark mode */
 }
 
-/* Add padding to the buttons */
-.MuiButton-root {
-  padding: 6px 16px;
+body.light-mode input[type="search"]::placeholder,
+body.light-mode .MuiTextField-root input::placeholder {
+  color: #000000 !important; /* Black placeholder text in light mode */
 }
 
-/* General input field styling for dark mode */
-body.dark-mode input[type="search"] {
-  background-color: #3a3a3a !important; /* Dark background for input fields */
-  color: #ffffff !important; /* Ensure the text is white in dark mode */
-}
-
-/* Adjust placeholder text color for dark mode */
-body.dark-mode input[type="search"]::placeholder {
-  color: #ffffff !important; /* White placeholder text for better readability */
-}
-
-/* Ensure the genre label remains visible and positioned correctly in dark mode */
+/* Adjusting the label for genre and other inputs */
 body.dark-mode .MuiInputLabel-root {
-  color: #ffffff !important; /* White label color */
+  color: #ffffff !important; /* White label color in dark mode */
 }
 
-/* Adjust the label position for better spacing in both light and dark modes */
-.MuiInputLabel-root.Mui-focused {
-  transform: translate(14px, -10px) scale(0.75); /* Moves the label slightly above the input field */
+body.light-mode .MuiInputLabel-root {
+  color: #000000 !important; /* Black label color in light mode */
 }
 
-/* Genre label spacing adjustment */
-.MuiInputLabel-root {
-  transform: translate(14px, -10px) scale(1); /* Adjust label position */
+/* Consistent card styles for movies and actors based on theme */
+body.light-mode .MuiCard-root {
+  background-color: #ffffff;
+  color: #000000;
 }
 
-/* Additional dark mode input adjustments for consistent visibility */
-body.dark-mode input[type="search"] {
-  border-color: #ffffff !important; /* White border in dark mode */
+body.dark-mode .MuiCard-root {
+  background-color: #333333;
+  color: #ffffff;
 }
 
-body.dark-mode input[type="search"]:hover,
-body.dark-mode input[type="search"]:focus {
-  outline-color: #ffffff !important; /* White outline on focus/hover */
+/* Adjusting the card content background and text color */
+body.light-mode .MuiCardContent-root {
+  background-color: #ffffff !important;
+  color: #000000 !important;
 }
 
-/* Consistent color for all input labels in dark mode */
-body.dark-mode .MuiFormLabel-root {
+body.dark-mode .MuiCardContent-root {
+  background-color: #333333 !important;
   color: #ffffff !important;
-}
-
-/* Navigation bar styling */
-.navbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1rem;
-}
-
-.nav-left {
-  display: flex;
-  align-items: center;
-}
-
-.nav-links {
-  display: flex;
-  gap: 1rem;
-}
-
-.nav-links a {
-  text-decoration: none;
-  color: inherit;
-  font-weight: bold;
 }

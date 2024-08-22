@@ -1,6 +1,12 @@
 import React, { useState } from "react";
 import { useQuery } from "react-query";
-import { getMoviesByGenre, getMovies, getMoviesByActor } from "../api/tmdb-api";
+import {
+  getMoviesByGenre,
+  getMovies,
+  searchActor,
+  getMoviesByActorId,
+  getMoviesByActor
+} from "../api/tmdb-api";
 import Spinner from "../components/spinner";
 import PageTemplate from "../components/templateMovieListPage";
 import FilterMoviesCard from "../components/filterMoviesCard";
@@ -11,12 +17,11 @@ const HomePage = () => {
   const [sortBy, setSortBy] = useState("popularity.desc");
   const [actorName, setActorName] = useState(""); // New state for actor search
 
-  // Determine which API call to use based on whether an actor is being searched.
   const { data, error, isLoading, isError } = useQuery(
-    ["discover", genreId, sortBy, actorName], // Include actorName as a query key
+    ["discover", genreId, sortBy, actorName],
     () => {
       if (actorName) {
-        return getMoviesByActor(actorName); // Use actor search API if actorName is provided
+        return getMoviesByActor(actorName);
       } else if (genreId !== "0") {
         return getMoviesByGenre(genreId, sortBy);
       } else {
@@ -28,12 +33,13 @@ const HomePage = () => {
   if (isLoading) return <Spinner />;
   if (isError) return <h1>{error.message}</h1>;
 
-  const movies = data?.results || [];
+  // Ensure movies is always an array
+  const movies = Array.isArray(data?.results) ? data.results : [];
 
   const handleFilterChange = (type, value) => {
     if (type === "genre") setGenreId(value);
     if (type === "sort") setSortBy(value);
-    if (type === "actor") setActorName(value); // Handle actor search
+    if (type === "actor") setActorName(value);
   };
 
   return (
@@ -47,10 +53,11 @@ const HomePage = () => {
         titleFilter=""
         genreFilter={genreId}
         sortBy={sortBy}
-        actorFilter={actorName} // Pass the actor filter down
+        actorFilter={actorName}
       />
     </PageTemplate>
   );
 };
+
 
 export default HomePage;
