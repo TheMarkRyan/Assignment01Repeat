@@ -18,6 +18,7 @@ import TopRatedMoviesPage from "./pages/TopRatedMoviesPage";
 import './index.css'; 
 import ThemeToggleProvider from "./ThemeToggleProvider";
 import ActorsPage from "./pages/ActorsPage";
+import ActorDetailsPage from './pages/ActorDetailsPage';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -44,6 +45,7 @@ const App = () => {
               <Route path="/movies/:id" element={<MoviePage />} />
               <Route path="/movies/upcoming" element={<UpcomingMoviesPage />} />
               <Route path="/movies/latest" element={<LatestMoviesPage />} />
+              <Route path="/actors/:id" element={<ActorDetailsPage />} />
               <Route path="/movies/recommendations" element={<RecommendationsPage />} />
               <Route path="/movies/top-rated" element={<TopRatedMoviesPage />} />
               <Route path="/actors" element={<ActorsPage />} />

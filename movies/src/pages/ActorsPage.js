@@ -9,12 +9,12 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
-import { useTheme } from "@mui/material/styles";
+import Button from "@mui/material/Button";
+import { Link } from "react-router-dom"; // Import Link for routing
 
 const ActorsPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const { data, error, isLoading, isError } = useQuery("popularActors", getPopularActors);
-  const theme = useTheme();
 
   if (isLoading) return <Spinner />;
   if (isError) return <h1>{error.message}</h1>;
@@ -36,16 +36,7 @@ const ActorsPage = () => {
         margin="normal"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
-        sx={{
-          marginBottom: "20px",
-          backgroundColor: theme.palette.mode === "dark" ? "#333333" : "#ffffff",
-          color: theme.palette.mode === "dark" ? "#ffffff" : "#000000",
-        }}
-        InputProps={{
-          style: {
-            color: theme.palette.mode === "dark" ? "#ffffff" : "#000000",
-          },
-        }}
+        sx={{ marginBottom: "20px" }}
       />
       {/* Actor Cards */}
       <Grid container spacing={2}>
@@ -53,8 +44,8 @@ const ActorsPage = () => {
           <Grid key={actor.id} item xs={12} sm={6} md={4} lg={3}>
             <Card
               sx={{
-                backgroundColor: theme.palette.mode === "dark" ? "#333" : "#fff",
-                color: theme.palette.mode === "dark" ? "#fff" : "#000",
+                backgroundColor: "#fff",
+                color: "#000",
               }}
             >
               <CardMedia
@@ -67,9 +58,18 @@ const ActorsPage = () => {
                 <Typography variant="h6" component="p">
                   {actor.name}
                 </Typography>
-                <Typography variant="body2" color={theme.palette.mode === "dark" ? "textSecondary" : "textPrimary"}>
+                <Typography variant="body2" color="textSecondary">
                   Popularity: {actor.popularity.toFixed(2)}
                 </Typography>
+                <Button
+                  component={Link}
+                  to={`/actors/${actor.id}`} // Navigates to the Actor Details page
+                  variant="contained"
+                  color="primary"
+                  sx={{ marginTop: "10px" }}
+                >
+                  More Info
+                </Button>
               </CardContent>
             </Card>
           </Grid>

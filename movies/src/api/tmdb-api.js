@@ -185,7 +185,7 @@ export const getSimilarMovies = async (movieId) => {
   }
   return await response.json();
 };
-// Updated getMoviesByActor function in your tmdb-api.js file
+
 export const getMoviesByActor = async (actorName) => {
   const url = `${baseUrl}/search/person?api_key=${apiKey}&query=${actorName}`;
   try {
@@ -265,3 +265,17 @@ export const getPopularActors = async () => {
     throw error;
   }
 };
+
+export const getActorDetails = async (actorId) => {
+  const url = `${baseUrl}/person/${actorId}?api_key=${apiKey}`;
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error('Failed to fetch actor details');
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+  }
+};
+
