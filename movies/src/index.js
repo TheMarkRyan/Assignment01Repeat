@@ -12,11 +12,11 @@ import FavoriteMoviesPage from "./pages/favoriteMoviesPage";
 import MovieReviewPage from "./pages/movieReviewPage";
 import TrendingMoviesPage from './pages/trendingMoviesPage';
 import AddMovieReviewPage from './pages/addMovieReviewPage';
-import LatestMoviesPage from "./pages/LatestMoviesPage"; // Import LatestMoviesPage
-import RecommendationsPage from "./pages/RecommendationsPage"; // Import RecommendationsPage
-import TopRatedMoviesPage from "./pages/TopRatedMoviesPage"; // Import TopRatedMoviesPage
-import './index.css'; // Import your global styles last
-
+import LatestMoviesPage from "./pages/LatestMoviesPage";
+import RecommendationsPage from "./pages/RecommendationsPage";
+import TopRatedMoviesPage from "./pages/TopRatedMoviesPage";
+import './index.css'; 
+import ThemeToggleProvider from "./ThemeToggleProvider"; // Import the theme provider
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -30,27 +30,29 @@ const queryClient = new QueryClient({
 
 const App = () => {
   return (
-    <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <SiteHeader />
-        <MoviesContextProvider>
-          <Routes>
-            <Route path="/reviews/:id" element={<MovieReviewPage />} />
-            <Route path="/reviews/form" element={<AddMovieReviewPage />} />
-            <Route path="/movies/trending" element={<TrendingMoviesPage />} />
-            <Route path="/movies/favorites" element={<FavoriteMoviesPage />} />
-            <Route path="/movies/:id" element={<MoviePage />} />
-            <Route path="/movies/upcoming" element={<UpcomingMoviesPage />} />
-            <Route path="/movies/latest" element={<LatestMoviesPage />} /> {/* New Route */}
-            <Route path="/movies/recommendations" element={<RecommendationsPage />} /> {/* New Route */}
-            <Route path="/movies/top-rated" element={<TopRatedMoviesPage />} /> {/* New Route */}
-            <Route path="/" element={<HomePage />} />
-            <Route path="*" element={<Navigate to="/" />} />
-          </Routes>
-        </MoviesContextProvider>
-      </BrowserRouter>
-      <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
+    <ThemeToggleProvider>
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+          <SiteHeader />
+          <MoviesContextProvider>
+            <Routes>
+              <Route path="/reviews/:id" element={<MovieReviewPage />} />
+              <Route path="/reviews/form" element={<AddMovieReviewPage />} />
+              <Route path="/movies/trending" element={<TrendingMoviesPage />} />
+              <Route path="/movies/favorites" element={<FavoriteMoviesPage />} />
+              <Route path="/movies/:id" element={<MoviePage />} />
+              <Route path="/movies/upcoming" element={<UpcomingMoviesPage />} />
+              <Route path="/movies/latest" element={<LatestMoviesPage />} />
+              <Route path="/movies/recommendations" element={<RecommendationsPage />} />
+              <Route path="/movies/top-rated" element={<TopRatedMoviesPage />} />
+              <Route path="/" element={<HomePage />} />
+              <Route path="*" element={<Navigate to="/" />} />
+            </Routes>
+          </MoviesContextProvider>
+        </BrowserRouter>
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
+    </ThemeToggleProvider>
   );
 };
 

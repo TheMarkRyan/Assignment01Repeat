@@ -8,9 +8,13 @@ import MenuIcon from "@mui/icons-material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import { useNavigate } from "react-router-dom";
-import { styled } from '@mui/material/styles';
+import { styled } from "@mui/material/styles";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { Brightness2, Brightness7 } from "@mui/icons-material";
+import Switch from "@mui/material/Switch";
+import { Box } from "@mui/material";
+import { useThemeToggle } from "../../ThemeToggleProvider"; // Import the custom hook
 
 const Offset = styled('div')(({ theme }) => theme.mixins.toolbar);
 
@@ -24,6 +28,8 @@ const SiteHeader = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   const navigate = useNavigate();
+
+  const { darkMode, toggleDarkMode } = useThemeToggle(); // Access darkMode and toggle function
 
   const menuOptions = [
     { label: "Home", path: "/" },
@@ -58,8 +64,19 @@ const SiteHeader = () => {
             TMDB Client
           </Typography>
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
-            All you ever wanted to know about Movies!
+            The Mark Ryan Movie Database!
           </Typography>
+          <Box display="flex" alignItems="center" mr={2}>
+            {/* Dark/Light Mode Toggle */}
+            <IconButton onClick={toggleDarkMode} color="inherit">
+              {darkMode ? <Brightness2 /> : <Brightness7 />}
+            </IconButton>
+            <Switch
+              checked={darkMode}
+              onChange={toggleDarkMode}
+              inputProps={{ "aria-label": "toggle dark/light mode" }}
+            />
+          </Box>
           {isMobile ? (
             <>
               <IconButton
