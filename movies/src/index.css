@@ -36,39 +36,67 @@ body {
   padding: 6px 16px;
 }
 
-/* Ensure text is black when inside the white input boxes in dark mode */
+/* General input field styling for dark mode */
 body.dark-mode input[type="search"] {
-  background-color: #3a3a3a !important; /* Grey background in dark mode */
-  color: #ffffff !important; /* Forces the text to be white */
+  background-color: #3a3a3a !important; /* Dark background for input fields */
+  color: #ffffff !important; /* Ensure the text is white in dark mode */
 }
 
-/* Additional fixes for placeholder text */
+/* Adjust placeholder text color for dark mode */
 body.dark-mode input[type="search"]::placeholder {
-  color: #ffffff !important; /* Ensures the placeholder text is white in dark mode */
+  color: #ffffff !important; /* White placeholder text for better readability */
 }
 
-/* Adjust the label for genre */
-.MuiInputLabel-root {
-  transform: translate(14px, -10px) scale(1); /* Adjusts label position */
-  color: #ffffff; /* Ensures the label remains visible in dark mode */
+/* Ensure the genre label remains visible and positioned correctly in dark mode */
+body.dark-mode .MuiInputLabel-root {
+  color: #ffffff !important; /* White label color */
 }
 
-/* Ensure consistency in dark mode */
-body.dark-mode input[type="search"] {
-  background-color: #3a3a3a !important; /* Grey background in dark mode */
-  color: #ffffff !important; /* Forces the text to be white */
+/* Adjust the label position for better spacing in both light and dark modes */
+.MuiInputLabel-root.Mui-focused {
+  transform: translate(14px, -10px) scale(0.75); /* Moves the label slightly above the input field */
 }
 
-body.dark-mode input[type="search"]::placeholder {
-  color: #ffffff !important; /* Ensures placeholder remains visible */
-}
-
-/* Adjust the label position for genre */
+/* Genre label spacing adjustment */
 .MuiInputLabel-root {
   transform: translate(14px, -10px) scale(1); /* Adjust label position */
 }
 
-/* Adjust genre label spacing */
-.MuiInputLabel-root.Mui-focused {
-  transform: translate(14px, -10px) scale(0.75); /* Move it slightly higher */
+/* Additional dark mode input adjustments for consistent visibility */
+body.dark-mode input[type="search"] {
+  border-color: #ffffff !important; /* White border in dark mode */
+}
+
+body.dark-mode input[type="search"]:hover,
+body.dark-mode input[type="search"]:focus {
+  outline-color: #ffffff !important; /* White outline on focus/hover */
+}
+
+/* Consistent color for all input labels in dark mode */
+body.dark-mode .MuiFormLabel-root {
+  color: #ffffff !important;
+}
+
+/* Navigation bar styling */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+}
+
+.nav-links {
+  display: flex;
+  gap: 1rem;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: inherit;
+  font-weight: bold;
 }

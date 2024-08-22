@@ -2,7 +2,7 @@ import React, { useState, useEffect, createContext, useContext } from "react";
 import Switch from "@mui/material/Switch";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import { Brightness4, Brightness7 } from "@mui/icons-material";
+import { Brightness2, Brightness7 } from "@mui/icons-material";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 

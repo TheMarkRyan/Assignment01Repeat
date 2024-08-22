@@ -12,15 +12,17 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import Box from "@mui/material/Box";
 import { getGenres } from "../../api/tmdb-api";
+import { useTheme } from "@mui/material/styles";
 
 const formControl = {
   margin: 1,
   minWidth: 150,
-  backgroundColor: "rgb(255, 255, 255)",
 };
 
 export default function FilterMoviesCard(props) {
   const { data, error, isLoading, isError } = useQuery("genres", getGenres);
+  const theme = useTheme();
+  const isDarkMode = theme.palette.mode === "dark"; // Check if the theme is in dark mode
 
   if (isLoading) {
     return <Spinner />;
@@ -64,8 +66,8 @@ export default function FilterMoviesCard(props) {
     <Card
       sx={{
         width: "100%",
-        backgroundColor: "#203354",
-        color: "#ffffff",
+        backgroundColor: isDarkMode ? "#203354" : "#ffffff", // Adjust background based on mode
+        color: isDarkMode ? "#ffffff" : "#000000", // Adjust text color based on mode
         borderRadius: 1,
         marginBottom: 2,
       }}
@@ -93,7 +95,19 @@ export default function FilterMoviesCard(props) {
           }}
         >
           <TextField
-            sx={{ ...formControl, flexBasis: "30%" }}
+            sx={{
+              ...formControl,
+              flexBasis: "30%",
+              input: {
+                color: isDarkMode ? "#ffffff" : "#000000", // Adjust input text color based on mode
+              },
+              "& .MuiFilledInput-root": {
+                backgroundColor: isDarkMode ? "#3a3a3a" : "#ffffff", // Adjust background based on mode
+              },
+              "& .MuiInputLabel-root": {
+                color: isDarkMode ? "#ffffff" : "#000000", // Adjust label color based on mode
+              },
+            }}
             id="filled-search-title"
             label="Search by Title"
             type="search"
@@ -102,7 +116,19 @@ export default function FilterMoviesCard(props) {
             onChange={handleTextChange}
           />
           <TextField
-            sx={{ ...formControl, flexBasis: "20%" }}
+            sx={{
+              ...formControl,
+              flexBasis: "20%",
+              input: {
+                color: isDarkMode ? "#ffffff" : "#000000", // Adjust input text color based on mode
+              },
+              "& .MuiFilledInput-root": {
+                backgroundColor: isDarkMode ? "#3a3a3a" : "#ffffff", // Adjust background based on mode
+              },
+              "& .MuiInputLabel-root": {
+                color: isDarkMode ? "#ffffff" : "#000000", // Adjust label color based on mode
+              },
+            }}
             id="filled-search-actor"
             label="Search by Actor"
             type="search"
@@ -110,7 +136,19 @@ export default function FilterMoviesCard(props) {
             value={actorValue} // Ensure actor search works independently
             onChange={handleActorChange}
           />
-          <FormControl sx={{ ...formControl, flexBasis: "20%" }}>
+          <FormControl
+            sx={{
+              ...formControl,
+              flexBasis: "20%",
+              "& .MuiInputBase-root": {
+                backgroundColor: isDarkMode ? "#3a3a3a" : "#ffffff", // Adjust background of the dropdown based on mode
+                color: isDarkMode ? "#ffffff" : "#000000", // Adjust text color based on mode
+              },
+              "& .MuiInputLabel-root": {
+                color: isDarkMode ? "#ffffff" : "#000000", // Adjust label color based on mode
+              },
+            }}
+          >
             <InputLabel id="genre-label">Genre</InputLabel>
             <Select
               labelId="genre-label"
